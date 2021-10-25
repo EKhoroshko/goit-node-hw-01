@@ -1,8 +1,8 @@
 const {
-    listContacts,
-    getContactById,
-    removeContact,
-    addContact, } = require('./contacts.js');
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact, updateContact } = require('./contacts.js');
 
 const chalk = require('chalk');
 
@@ -10,30 +10,30 @@ const chalk = require('chalk');
 
 // TODO: рефакторить
 async function invokeAction({ action, id, name, email, phone }) {
-    switch (action) {
-        case 'list':
-            const list = await listContacts()
-            console.log(list);
-            return list;
+  switch (action) {
+    case 'list':
+      const list = await listContacts()
+      console.log(list);
+      return list;
 
-        case 'get':
-            const oneUser = await getContactById(id)
-            console.log(oneUser);
-            return oneUser;
+    case 'get':
+      const oneUser = await getContactById(id)
+      console.log(oneUser);
+      return oneUser;
 
-        case 'add':
-            const newList = await addContact(name, email, phone)
-            console.log(newList);
-            return newList;
+    case 'add':
+      const newList = await addContact(name, email, phone)
+      console.log(newList);
+      return newList;
 
-        case 'remove':
-            const remove = await removeContact(id)
-            console.log(remove);
-            return remove;
-
-        default:
-            console.warn(chalk.red(' Unknown action type!'));
-    }
+    case 'remove':
+      const remove = await removeContact(id)
+      console.log(remove);
+      return remove;
+    
+    default:
+      console.warn(chalk.red(' Unknown action type!'));
+  }
 }
 
 invokeAction(argv);*/
@@ -41,11 +41,11 @@ invokeAction(argv);*/
 const { Command } = require('commander');
 const program = new Command();
 program
-    .option('-a, --action <type>', 'choose action')
-    .option('-i, --id <type>', 'user id')
-    .option('-n, --name <type>', 'user name')
-    .option('-e, --email <type>', 'user email')
-    .option('-p, --phone <type>', 'user phone');
+  .option('-a, --action <type>', 'choose action')
+  .option('-i, --id <type>', 'user id')
+  .option('-n, --name <type>', 'user name')
+  .option('-e, --email <type>', 'user email')
+  .option('-p, --phone <type>', 'user phone');
 
 program.parse(process.argv);
 
@@ -53,34 +53,39 @@ const argv = program.opts();
 
 // TODO: рефакторить
 async function invokeAction({ action, id, name, email, phone }) {
-    try {
-        switch (action) {
-            case 'list':
-                const list = await listContacts()
-                console.log(list);
-                return list;
+  try {
+    switch (action) {
+      case 'list':
+        const list = await listContacts()
+        console.log(list);
+        return list;
 
-            case 'get':
-                const getContact = await getContactById(id);
-                console.log(getContact);
-                return getContact;
+      case 'get':
+        const getContact = await getContactById(id);
+        console.log(getContact);
+        return getContact;
 
-            case 'add':
-                const newList = await addContact(name, email, phone)
-                console.log(newList);
-                return newList;
+      case 'add':
+        const newList = await addContact(name, email, phone)
+        console.log(newList);
+        return newList;
 
-            case 'remove':
-                const remove = await removeContact(id)
-                console.log(remove);
-                return remove;
+      case 'remove':
+        const remove = await removeContact(id)
+        console.log(remove);
+        return remove;
 
-            default:
-                console.warn(chalk.red(' Unknown action type!'));
-        }
-    } catch (error) {
-        console.log(chalk.red(error.message));
+      case 'update':
+        const update = await updateContact(id, name, email, phone)
+        console.log(update);
+        return update;
+
+      default:
+        console.warn(chalk.red(' Unknown action type!'));
     }
+  } catch (error) {
+    console.log(chalk.red(error.message));
+  }
 }
 
 invokeAction(argv);
